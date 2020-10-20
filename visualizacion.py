@@ -78,31 +78,35 @@ def dibujar_tablero(f, n, m, t, a):
         if f[i] == 1:
             c = i % (n * m)
             if c == cprev - 1:
-                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), -step_x, 0.01], facecolor='red'))
+                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2 + 0.005, 1 - (cprev // n + 1) * step_y + step_y / 2), -step_x, 0.01], facecolor='red'))
                 direc = "left"
             if c == cprev - 7:
-                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), -0.01, step_y], facecolor='red'))
+                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), 0.01, step_y + 0.005], facecolor='red'))
                 direc = "up"
             if c == cprev + 1:
-                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), step_x, -0.01], facecolor='red'))
+                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2- 0.005), step_x + 0.01, 0.01], facecolor='red'))
                 direc = "right"
             if c == cprev + 7:
-                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), 0.01, -step_y], facecolor='red'))
+                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2 + 0.005), 0.01, -step_y - 0.005], facecolor='red'))
                 direc = "down"
             if c == cprev:
-                vertices = [((c % n) * step_x + step_x / 2, 1 - (c // n + 1) * step_y + step_y / 2)]
+                vertices = []
                 if direc == "right":
-                    vertices.append(((c % n) * step_x + step_x / 4, 1 - (c // n + 1) * step_y + step_y / 3))
-                    vertices.append(((c % n) * step_x + step_x / 4, 1 - (c // n + 1) * step_y + 2 * step_y / 3))
+                    vertices.append(((c % n) * step_x + step_x / 2, 1 - (c // n + 1) * step_y + step_y / 2 + 0.005))
+                    vertices.append(((c % n) * step_x + step_x / 4, 1 - (c // n + 1) * step_y + step_y / 3 + 0.005))
+                    vertices.append(((c % n) * step_x + step_x / 4, 1 - (c // n + 1) * step_y + 2 * step_y / 3 + 0.005))
                 elif direc == "up":
-                    vertices.append(((c % n) * step_x + step_x / 3, 1 - (c // n + 1) * step_y + step_y / 4))
-                    vertices.append(((c % n) * step_x + 2 * step_x / 3, 1 - (c // n + 1) * step_y + step_y / 4))
+                    vertices.append(((c % n) * step_x + step_x / 2 + 0.005, 1 - (c // n + 1) * step_y + step_y / 2) + 0.01)
+                    vertices.append(((c % n) * step_x + step_x / 3 + 0.005, 1 - (c // n + 1) * step_y + step_y / 4) + 0.01)
+                    vertices.append(((c % n) * step_x + 2 * step_x / 3 + 0.005, 1 - (c // n + 1) * step_y + step_y / 4) + 0.01)
                 elif direc == "left":
-                    vertices.append(((c % n) * step_x + 3 * step_x / 4, 1 - (c // n + 1) * step_y + step_y / 3))
-                    vertices.append(((c % n) * step_x + 3 * step_x / 4, 1 - (c // n + 1) * step_y + 2 * step_y / 3))
+                    vertices.append(((c % n) * step_x + step_x / 2, 1 - (c // n + 1) * step_y + step_y / 2+ 0.005))
+                    vertices.append(((c % n) * step_x + 3 * step_x / 4, 1 - (c // n + 1) * step_y + step_y / 3 + 0.005))
+                    vertices.append(((c % n) * step_x + 3 * step_x / 4, 1 - (c // n + 1) * step_y + 2 * step_y / 3 + 0.005))
                 elif direc == "down":
-                    vertices.append(((c % n) * step_x + step_x / 3, 1 - (c // n + 1) * step_y + 3 * step_y / 4))
-                    vertices.append(((c % n) * step_x + 2 * step_x / 3, 1 - (c // n + 1) * step_y + 3 * step_y / 4))
+                    vertices.append(((c % n) * step_x + step_x / 2 + 0.005, 1 - (c // n + 1) * step_y + step_y / 2 - 0.01))
+                    vertices.append(((c % n) * step_x + step_x / 3 + 0.005, 1 - (c // n + 1) * step_y + 3 * step_y / 4 - 0.01))
+                    vertices.append(((c % n) * step_x + 2 * step_x / 3 + 0.005, 1 - (c // n + 1) * step_y + 3 * step_y / 4 - 0.01))
                 tangulos.append(patches.Polygon(vertices, color = "red"))
             cprev = c
             
