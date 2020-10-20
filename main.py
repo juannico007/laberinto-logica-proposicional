@@ -49,7 +49,7 @@ print("\nRegla 4:")
 formula_4 = fn.regla_4(Nfilas, Ncolumnas, Nturnos)
 print(fn.Inorderp(fn.String2Tree(formula_4), Nfilas, Ncolumnas, Nturnos))
 
-print("\nRegla 5")
+print("\nRegla 5:")
 formula_5 = fn.regla_5(final, Nfilas, Ncolumnas, Nturnos)
 print(fn.Inorderp(fn.String2Tree(formula_5), Nfilas, Ncolumnas, Nturnos))
     
