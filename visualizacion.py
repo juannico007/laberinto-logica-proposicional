@@ -1,12 +1,15 @@
 #-*-coding: utf-8-*-
 # Edgar Andrade, Septiembre 2018
 
-# Visualizacion de tableros de ajedrez 3x3 a partir de
-# una lista de literales. Cada literal representa una casilla;
-# el literal es positivo sii hay un caballo en la casilla.
+# Visualizacion de laberintos nxm a partir de
+# una lista de literales. los primeros nxm literales representan muros en casillas;
+# el literal es positivo sii hay un muro en esa casilla.
+# los demas literales representan la presencia del agente en esa posicion
+# el literal es positivo sii el agente esta en esa casilla en ese turno
 
-# Formato de la entrada: - las letras proposionales seran: 1, ..., 9;
+# Formato de la entrada: - las letras proposionales seran: 1, ..., 2450;
 #                        - solo se aceptan literales (ej. 1, ~2, 3, ~4, etc.)
+# Require conocer el tamaño de la cuadricula
 # Requiere también un número natural, para servir de índice del tablero,
 # toda vez que pueden solicitarse varios tableros.
 
@@ -22,11 +25,12 @@ import matplotlib.patches as patches
 from matplotlib.offsetbox import AnnotationBbox, OffsetImage
 print("Listo!")
 
-def dibujar_tablero(f, n):
+def dibujar_tablero(f, n, m, t, a):
     # Visualiza un tablero dada una formula f
     # Input:
     #   - f, una lista de literales
-    #   - n, un numero de identificacion del archivo
+    #   - n, m, ancho y largo de la cuadricula respectivamente
+    #   - a, un numero de identificacion del archivo
     # Output:
     #   - archivo de imagen tablero_n.png
 
@@ -36,62 +40,89 @@ def dibujar_tablero(f, n):
     axes.get_yaxis().set_visible(False)
 
     # Dibujo el tablero
-    step = 1./7
+    step_x = 1/m
+    step_y = 1/n
     tangulos = []
     
-    # Cre
-    
-    """# Creo los cuadrados claros en el tablero
-    tangulos.append(patches.Rectangle((0, step), step, step, facecolor='cornsilk'))
-    tangulos.append(patches.Rectangle(*[(step, 0), step, step], facecolor='cornsilk'))
-    tangulos.append(patches.Rectangle(*[(2 * step, step), step, step], facecolor='cornsilk'))
-    tangulos.append(patches.Rectangle(*[(step, 2 * step), step, step], facecolor='cornsilk'))
-    
-    # Creo los cuadrados oscuros en el tablero
-    tangulos.append(patches.Rectangle(*[(2 * step, 2 * step), step, step], facecolor='lightslategrey'))
-    tangulos.append(patches.Rectangle(*[(0, 2 * step), step, step], facecolor='lightslategrey'))
-    tangulos.append(patches.Rectangle(*[(2 * step, 0), step, step], facecolor='lightslategrey'))
-    tangulos.append(patches.Rectangle(*[(step, step), step, step], facecolor='lightslategrey'))
-    tangulos.append(patches.Rectangle(*[(0, 0), step, step], facecolor='lightslategrey'))"""
+    # Creo los muros del laberinto
+    for i in range(n*m):
+       if f[i]==1:
+           tangulos.append(patches.Rectangle(*[((i % n) * step_x, 1 - (i // n + 1) * step_y), step_x, step_y], facecolor='black'))
+       
 
-    # Creo las líneas del tablero
-    for j in range(7):
-        locacion = j * step
-        # Crea linea horizontal en el rectangulo
-        tangulos.append(patches.Rectangle(*[(0, step + locacion), 1, 0.005], facecolor='black'))
+    #Ubico el inicio
+    for i in range(n * m, n * m * 2):
+        if f[i] == 1:
+            cprev = i % (n * m)
+            tangulos.append(patches.Rectangle(*[((cprev % n) * step_x, 1 - (cprev // n + 1) * step_y), step_x, step_y], facecolor='blue'))
+    
+    #Ubico el final
+    for i in range(n * m * t, n * m * (t + 1)):
+        if f[i] == 1:
+            cf = i % (n * m)
+            tangulos.append(patches.Rectangle(*[((cf % n) * step_x, 1 - (cf // n + 1) * step_y), step_x, step_y], facecolor='blue'))
+           
+    # Creo las líneas horizontales del tablero
+    for i in range(n):
+        locacion = i * step_y
+        tangulos.append(patches.Rectangle(*[(0, step_y + locacion), 1, 0.005], facecolor='black'))
         
-        # Crea linea vertical en el rectangulo
-        tangulos.append(patches.Rectangle(*[(step + locacion, 0), 0.005, 1], facecolor='black'))
-
+    # Creo las lineas verticales del tablero
+    for i in range(m):
+        locacion = i * step_x
+        tangulos.append(patches.Rectangle(*[(step_x + locacion, 0), 0.005, 1], facecolor='black'))            
+            
+    #Coloco las lineas de los pasos
+    direc = " "
+    for i in range(n * m * 2, n * m * t):
+        if f[i] == 1:
+            c = i % (n * m)
+            if c == cprev - 1:
+                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), -step_x, 0.01], facecolor='red'))
+                direc = "left"
+            if c == cprev - 7:
+                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), -0.01, step_y], facecolor='red'))
+                direc = "up"
+            if c == cprev + 1:
+                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), step_x, -0.01], facecolor='red'))
+                direc = "right"
+            if c == cprev + 7:
+                tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), 0.01, -step_y], facecolor='red'))
+                direc = "down"
+            if c == cprev:
+                vertices = [((c % n) * step_x + step_x / 2, 1 - (c // n + 1) * step_y + step_y / 2)]
+                if direc == "right":
+                    vertices.append(((c % n) * step_x + step_x / 4, 1 - (c // n + 1) * step_y + step_y / 3))
+                    vertices.append(((c % n) * step_x + step_x / 4, 1 - (c // n + 1) * step_y + 2 * step_y / 3))
+                elif direc == "up":
+                    vertices.append(((c % n) * step_x + step_x / 3, 1 - (c // n + 1) * step_y + step_y / 4))
+                    vertices.append(((c % n) * step_x + 2 * step_x / 3, 1 - (c // n + 1) * step_y + step_y / 4))
+                elif direc == "left":
+                    vertices.append(((c % n) * step_x + 3 * step_x / 4, 1 - (c // n + 1) * step_y + step_y / 3))
+                    vertices.append(((c % n) * step_x + 3 * step_x / 4, 1 - (c // n + 1) * step_y + 2 * step_y / 3))
+                elif direc == "down":
+                    vertices.append(((c % n) * step_x + step_x / 3, 1 - (c // n + 1) * step_y + 3 * step_y / 4))
+                    vertices.append(((c % n) * step_x + 2 * step_x / 3, 1 - (c // n + 1) * step_y + 3 * step_y / 4))
+                tangulos.append(patches.Polygon(vertices, color = "red"))
+            cprev = c
+            
     for t in tangulos:
         axes.add_patch(t)
 
-    """# Cargando imagen de caballo
-    arr_img = plt.imread("caballo.png", format='png')
-    imagebox = OffsetImage(arr_img, zoom=0.1)
-    imagebox.image.axes = axes"""
-
-    # Creando las direcciones en la imagen de acuerdo a literal
-    direcciones = {}
-    direcciones[1] = [0.165, 0.835]
-    direcciones[2] = [0.5, 0.835]
-    direcciones[3] = [0.835, 0.835]
-    direcciones[4] = [0.165, 0.5]
-    direcciones[5] = [0.5, 0.5]
-    direcciones[6] = [0.835, 0.5]
-    direcciones[7] = [0.165, 0.165]
-    direcciones[8] = [0.5, 0.165]
-    direcciones[9] = [0.835, 0.165]
-
-    """for l in f:
-        if f[l] != 0:
-            ab = AnnotationBbox(imagebox, direcciones[int(l)], frameon=False)
-            axes.add_artist(ab)"""
-
+    
     #plt.show()
-    fig.savefig("tablero_" + str(n) + ".png")
-   
+    fig.savefig("tablero_" + str(a) + ".png")
+ 
 
-f={1:0, 2:1, 3:0,4:1, 5:0, 6:1, 7:0, 8:0, 9:0}
+f={x:0 for x in range(2450)}
+muros = [0, 1, 8, 10, 12, 13, 17, 22, 24, 25, 26, 28, 29, 33, 36, 37, 38, 40, 47]
+for i in muros:
+    f[i] = 1
+turnos = [80, 128, 170, 212, 254, 296, 346, 396, 452, 508, 558, 608, 664, 720, 776, 2449]
+for i in range(832, 2449, 49):
+    turnos.append(i)
+for i in turnos:
+    f[i] = 1
+#print(f)
 
-dibujar_tablero(f,121)
+dibujar_tablero(f, 7, 7, 49, 121)
