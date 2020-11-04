@@ -118,15 +118,16 @@ def dibujar_tablero(f, n, m, t, a):
     fig.savefig("tablero_" + str(a) + ".png")
  
 
-f={x:0 for x in range(2450)}
-muros = [0, 1, 8, 10, 12, 13, 17, 22, 24, 25, 26, 28, 29, 33, 36, 37, 38, 40, 47]
-for i in muros:
-    f[i] = 1
-turnos = [80, 128, 170, 212, 254, 296, 346, 396, 452, 508, 558, 608, 664, 720, 776, 2449]
-for i in range(832, 2449, 49):
-    turnos.append(i)
-for i in turnos:
-    f[i] = 1
-#print(f)
+if __name__ == "__main__":
+    f={x:0 for x in range(2450)}    
+    muros = [0, 1, 8, 10, 12, 13, 17, 22, 24, 25, 26, 28, 29, 33, 36, 37, 38, 40, 47]
+    for i in muros:
+        f[i] = 1
+    turnos = [80, 128, 170, 212, 254, 296, 346, 396, 452, 508, 558, 608, 664, 720, 776, 2449]
+    for i in range(832, 2449, 49):
+        turnos.append(i)
+    for i in turnos:
+        f[i] = 1
+    #print(f)
 
-dibujar_tablero(f, 7, 7, 49, 121)
+    dibujar_tablero(f, 7, 7, 49, 121)
