@@ -1,19 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys
+
+##################################Variables globales#######################################################
+letrasProposicionales=[chr(x) for x in range(256, 2706)]        #Va de 256 hasta la letra 2450: la ultima
+Conectivos = ['O','Y','>','=']                                  #Lista de conectivos para inorder
+negacion = ["-"]                                                #Negacion para inorder
+###########################################################################################################
+
 #Arbol para guardar las formulas
 class Tree(object):
     def __init__(self, label, left, right):
         self.left = left
         self.right = right
         self.label = label
+    
+    #Conversion del arbol a forma inorderr
+    def inorder(self):
+        if self.label in letrasProposicionales:
+            return self.label
+        elif self.label in negacion:
+            return  self.label + self.right.inorder()
+        elif self.label in Conectivos:
+            return "(" + self.left.inorder() + self.label + self.right.inorder() + ")"
+        else:
+            print("Rotulo incorrecto")
+            sys.exit(1)
         
         
 #Funcion que convierte un string en polaca inversa a arbol. Recibe:
 #Formula en polaca inversa a convertir: A
 def String2Tree(A):
-    letrasProposicionales=[chr(x) for x in range(256, 2706)]        #Va de 256 hasta la letra 2450: la ultima
-    Conectivos = ['O','Y','>','=']
     Pila = []
     for c in A:
         if c in letrasProposicionales:
@@ -51,10 +69,10 @@ def inicio_final(Nf, Nc):
     #pide inicio
     print("\nPosicion inicial:")
     f = int(input("Inserte la fila: "))
-    assert(f >= 0 and f <= Nf - 1), ("Fila invalida, debe ser un numero entre 0 y " + str(Nf)
+    assert(f >= 0 and f <= Nf - 1), ("Fila invalida, debe ser un numero entre 0 y " + str(Nf - 1)
                                             + "\nse recibio " + str(f))
     c = int(input("Inserte la columna: "))
-    assert(c >= 0 and f <= Nc - 1), ("Columna invalida, debe ser un numero entre 0 y " + str(Nc)
+    assert(c >= 0 and f <= Nc - 1), ("Columna invalida, debe ser un numero entre 0 y " + str(Nc - 1)
                                             + "\nse recibio " + str(c))
     inicio = (f, c)
 
