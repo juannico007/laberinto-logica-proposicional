@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import functions as fn
-import tableaux as tb
+import FNC as ts
 import maze as mz
 import visualizacion as vs
+import DPLL as dp
 
-
-interp_verdaderas = {x:0 for x in range(2450)}  
+letrasProposicionales = [chr(x) for x in range(256, 2706)]
+interp_verdaderas = {}
 Nfilas = 7
 Ncolumnas = 7
 Nturnos = 49
@@ -14,69 +15,91 @@ letras_muros = []
 letras_turnos = []
 muros = []
 
-print("Se jugara en un tablero de", Nfilas, "x", Ncolumnas)
-print("Para iniciar, se requieren la posicion inicial y final del jugador")
-
+#Establece el inicio y el final dado por el usuario
 inicio, final = fn.inicio_final(Nfilas, Ncolumnas)
 
+#Crea el laberinto conectado
 walls = mz.create_maze(inicio, final, Nfilas, Ncolumnas)
 
-print("\nletras representando muros")
-print("\nfilas x columnas")
+print("Generando letras")
+
+#Letras correspondientes a los muros
 for i in range(Nfilas):
     for j in range(Ncolumnas):
         n = fn.codifica(i, j, Nfilas, Ncolumnas)
         cod = chr(n + 256)
-        print(cod, end=" ")
         letras_muros.append(cod)
-    print()
-    
+
+#Asigna valores de verdad a los muros con el laberinto hecho
 for(i, j) in walls:
-    muros.append(fn.codifica(i, j, Nfilas, Ncolumnas))
-    
+    n = fn.codifica(i, j, Nfilas, Ncolumnas)
+    cod = chr(n + 256)
+    muros.append(cod)
 for i in muros:
         interp_verdaderas[i] = 1
-    
-print("\nletras por turnos")
+for i in range(Nfilas):
+    for j in range(Ncolumnas):
+        if (i, j) not in walls:
+            n = fn.codifica(i, j, Nfilas, Ncolumnas)
+            cod = chr(n + 256)
+            interp_verdaderas[cod] = 0
+
+#Letras correspondientes a la presencia del agente en una casilla en un turno
 for i in range(Nturnos):
-    print("\nturno", i, ": ")
     for j in range(Nfilas):
         for k in range(Ncolumnas):
             n = fn.P(j, k, i, Nfilas, Ncolumnas, Nturnos)
-            print(n, end=" ")
             letras_turnos.append(n)
-        print()
-        
+
+
+print("Generando reglas y formula")
 formula = ""
 
-print("\nGenerando regla 1:")
+#Regla 1
 formula_1 = fn.regla_1(inicio, final, Nfilas, Ncolumnas, Nturnos)
 formula += formula_1
 
-print("\nGenerando regla 2:")
+#Regla 2
 formula_2 = fn.regla_2(Nfilas, Ncolumnas, Nturnos)
 formula += formula_2 + "Y"
 
-
-print("\nGenerando regla 3:")
+#Regla 3
 formula_3 = fn.regla_3(Nfilas, Ncolumnas, Nturnos)
 formula += formula_3 + "Y"
 
-print("\nGenerando regla 4:")
+#Regla 4
 formula_4 = fn.regla_4(Nfilas, Ncolumnas, Nturnos)
 formula += formula_4 + "Y"
 
-print("\nGenerando regla 5:")
+#Regla 5
 formula_5 = fn.regla_5(final, Nfilas, Ncolumnas, Nturnos)
 formula += formula_5 + "Y"
 
+#Regla 6
+formula_6 = fn.regla_6(final, Nfilas, Ncolumnas, Nturnos)
+formula += formula_6 + "Y"
 
-turnos = [80, 128, 170, 212, 254, 296, 346, 396, 452, 508, 558, 608, 664, 720, 776, 2449]
-for i in range(832, 2449, 49):
-    turnos.append(i)
-for i in turnos:
-    interp_verdaderas[i] = 1
-        
-vs.dibujar_tablero(interp_verdaderas, 7, 7, 49, 121)
-#print(tb.Tableaux(formula))
-#tb.imprime_listaHojas(tb.listaHojas)
+print("Formula hecha")
+print("Ejecutando transformacion de Tseitin")
+x = ts.Tseitin(fn.String2Tree(formula).inorder(), letrasProposicionales)
+x = ts.formaClausal(x)
+print("Transformacion de Tseitin hecha")
+print("Forma normal conjuntiva hallada")
+
+print("Buscando interpretación que satisfaga el problema")
+I = dp.DPLL(x, interp_verdaderas)
+interp_verdaderas = {}
+print("Interpretación hallada")
+print("Eliminando letras adicionales")
+for i in I:
+    if i in letras_muros:
+        m = ord(i) - 256 - (Nfilas * Ncolumnas)
+        interp_verdaderas[m] = I[i]
+    elif i in letras_turnos:
+        m = ord(i) - 256
+        interp_verdaderas[m] = I[i]
+print("Letras adicionales eliminadas")
+for i in range(Nfilas * Ncolumnas * (Nturnos + 1)):
+    if i not in interp_verdaderas:
+        interp_verdaderas[i] = 0
+vs.dibujar_tablero(interp_verdaderas, Nfilas, Ncolumnas, Nturnos, 122)
