@@ -157,5 +157,3 @@ def create_maze(start, end, c = 7, f = 7):
     #print("sets: ", sets)
     #print(board)
     return walls
-
-print(create_maze((0,0), (6,6)))
