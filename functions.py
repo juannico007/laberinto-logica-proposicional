@@ -247,7 +247,7 @@ def regla_4(Nf, Nc, Nt):
     return r4
         
 #Quinta regla: Una vez el agente llegue a la ultima casilla, no se movera de ella. Recibe:
-#casilla final: final como tupla de forma (fila, columna)
+#casilla final: f como tupla de forma (fila, columna)
 #Numero de filas: Nf, Numero de columnas: Nc y Numero de turnos: Nt como enteros
 def regla_5(f, Nf, Nc, Nt):
     r5 = ""
@@ -267,3 +267,32 @@ def regla_5(f, Nf, Nc, Nt):
             r5 += P(f[0], f[1], i, Nf, Nc, Nt) + ">" + "Y"
         
     return r5
+
+#Sexta regla: el agente no puede volver a pararse en una casilla en la que ya estuvo, excepto la del final. Recibe:
+#Numero de filas: Nf, Numero de columnas: Nc y Numero de turnos: Nt como enteros
+#casilla final: f como tupla de forma (fila, columna)
+def regla_6(f, Nf, Nc, Nt):
+    r6 = ""
+    inicial_3 = True
+    for fi in range(Nf):
+        for c in range(Nc):
+            if (fi, c) != f:
+                inicial_2 = True
+                for i in range(Nt - 1):
+                    inicial = True
+                    for t in range(i+ 1, Nt):
+                        if inicial:
+                            r6 += P(fi, c, t, Nf, Nc, Nt)
+                            inicial = False
+                        else:
+                            r6 += P(fi, c, t, Nf, Nc, Nt) + "O"
+                    if inicial_2:
+                        r6 += "-" + P(fi, c, i, Nf, Nc, Nt) + ">"
+                        inicial_2 = False
+                    else:
+                        r6 += "-" + P(fi, c, i, Nf, Nc, Nt) + ">" + "Y"
+                if inicial_3:
+                    inicial_3 = False
+                else:
+                    r6 += "Y"
+    return r6
