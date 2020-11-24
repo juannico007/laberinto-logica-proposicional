@@ -136,6 +136,34 @@ def Pinv(n, Nf, Nc, Nt):
     f, c = decodifica(v1, Nf, Nc)
     return f, c, t
 
+
+#Condiciones iniciales, tomadas de una lista de muros, recibe
+#Lista de casillas en las que hay muros: M
+#Numero de filas: Nf, Numero de columnas: Nc
+def cond_inicial(M, Nf, Nc):
+    inicial = True
+    r = ""
+    for f in range(Nf):
+        for c in range(Nc):
+            if(f, c) in M:
+                if inicial:
+                    code = chr(codifica(f, c, Nf, Nc) + 256)
+                    r += code
+                    inicial = False
+                else:
+                    code = chr(codifica(f, c, Nf, Nc) + 256)
+                    r += code + "Y"
+            else:
+                if inicial:
+                    code = chr(codifica(f, c, Nf, Nc) + 256)
+                    r += code + "-"
+                    inicial = False
+                else:
+                    code = chr(codifica(f, c, Nf, Nc) + 256)
+                    r += code + "-" + "Y"
+    return r
+
+
 #Primera regla: debe iniciar en una casilla dada y terminar en una casilla dada, recibe:
 #Inicio: i y final: f como tuplas de forma (fila, columna)
 #Numero de turnos: Nt numero de filas: Nf y numero de columnas: Nc como enteros
@@ -267,32 +295,3 @@ def regla_5(f, Nf, Nc, Nt):
             r5 += P(f[0], f[1], i, Nf, Nc, Nt) + ">" + "Y"
         
     return r5
-
-#Sexta regla: el agente no puede volver a pararse en una casilla en la que ya estuvo, excepto la del final. Recibe:
-#Numero de filas: Nf, Numero de columnas: Nc y Numero de turnos: Nt como enteros
-#casilla final: f como tupla de forma (fila, columna)
-def regla_6(f, Nf, Nc, Nt):
-    r6 = ""
-    inicial_3 = True
-    for fi in range(Nf):
-        for c in range(Nc):
-            if (fi, c) != f:
-                inicial_2 = True
-                for i in range(Nt - 1):
-                    inicial = True
-                    for t in range(i+ 1, Nt):
-                        if inicial:
-                            r6 += P(fi, c, t, Nf, Nc, Nt)
-                            inicial = False
-                        else:
-                            r6 += P(fi, c, t, Nf, Nc, Nt) + "O"
-                    if inicial_2:
-                        r6 += "-" + P(fi, c, i, Nf, Nc, Nt) + ">"
-                        inicial_2 = False
-                    else:
-                        r6 += "-" + P(fi, c, i, Nf, Nc, Nt) + ">" + "Y"
-                if inicial_3:
-                    inicial_3 = False
-                else:
-                    r6 += "Y"
-    return r6
