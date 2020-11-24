@@ -61,7 +61,6 @@ def dibujar_tablero(f, n, m, t, a):
         if f[i] == 1:
             cf = i % (n * m)
             tangulos.append(patches.Rectangle(*[((cf % n) * step_x, 1 - (cf // n + 1) * step_y), step_x, step_y], facecolor='blue'))
-    print(cf)
     # Creo las líneas horizontales del tablero
     for i in range(n):
         locacion = i * step_y
@@ -89,8 +88,6 @@ def dibujar_tablero(f, n, m, t, a):
             if c == cprev + 7:
                 tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2 + 0.005), 0.01, -step_y - 0.005], facecolor='red'))
                 direc = "down"
-            if c == cf:
-                print("a")
                 vertices = []
                 if direc == "right":
                     vertices.append(((c % n) * step_x + step_x / 2, 1 - (c // n + 1) * step_y + step_y / 2 + 0.005))
