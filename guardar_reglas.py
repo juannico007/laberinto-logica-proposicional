@@ -1,16 +1,16 @@
 print("Importando paquetes...")
 import FNC as F
-import Reglas as R
+import functions as fn
 import json
 print("Listo!")
 
-def guardar_polaca(regla_polaca, archivo, letrasProposicionalesA, letrasProposicionalesB):
+def guardar_polaca(regla_polaca, archivo, letrasProposicionalesA):
     print("Creando arbol...")
-    regla_arbol = R.String2Tree(regla_polaca)
+    regla_arbol = fn.String2Tree(regla_polaca)
     print("Creando cadena inorder...")
-    regla_inorder = R.Inorder(regla_arbol)
+    regla_inorder = regla_arbol.inorder()
     print("Transformacion de Tseitin...")
-    regla_fnc = F.Tseitin(regla_inorder, letrasProposicionalesA, letrasProposicionalesB)
+    regla_fnc = F.Tseitin(regla_inorder, letrasProposicionalesA)
     print("Forma clausal...")
     regla_clausal = F.formaClausal(regla_fnc)
     print(f"Guardando a archivo {archivo}...")
@@ -35,18 +35,6 @@ def guardar_fnc(regla_fnc, archivo, letrasProposicionalesA, letrasProposicionale
     with open(archivo + '.json', 'w') as outfile:
         json.dump(regla_clausal, outfile)
     print("Terminado!")
-
-print("Creando reglas...")
-regla_polaca = R.regla0()
-letrasProposicionalesA = [chr(x) for x in range(256, 1000)] # Modificar de acuerdo a reglas
-letrasProposicionalesB = [chr(x) for x in range(1000, 2000)] # Modificar de acuerdo a reglas
-guardar_polaca(regla_polaca, 'regla0', letrasProposicionalesA, letrasProposicionalesB)
-
-regla_polaca = R.regla1()
-letrasProposicionalesB = [chr(x) for x in range(2001, 3000)] # Modificar de acuerdo a reglas
-guardar_polaca(regla_polaca, 'regla1', letrasProposicionalesA, letrasProposicionalesB)
-
-print("Finalizado!")
 
 #############################
 # Las reglas se leen con:
