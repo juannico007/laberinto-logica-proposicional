@@ -15,28 +15,20 @@ def enFNC(A):
     assert(len(A)==4 or len(A)==7), u"Fórmula incorrecta!"
     B = ''
     p = A[0]
-    # print('p', p)
     if "-" in A:
         q = A[-1]
-        # print('q', q)
         B = "-"+p+"O-"+q+"Y"+p+"O"+q
     elif "Y" in A:
         q = A[3]
-        # print('q', q)
         r = A[5]
-        # print('r', r)
         B = q+"O-"+p+"Y"+r+"O-"+p+"Y-"+q+"O-"+r+"O"+p
     elif "O" in A:
         q = A[3]
-        # print('q', q)
         r = A[5]
-        # print('r', r)
         B = "-"+q+"O"+p+"Y-"+r+"O"+p+"Y"+q+"O"+r+"O-"+p
     elif ">" in A:
         q = A[3]
-        # print('q', q)
         r = A[5]
-        # print('r', r)
         B = q+"O"+p+"Y-"+r+"O"+p+"Y-"+q+"O"+r+"O-"+p
     else:
         print(u'Error enENC(): Fórmula incorrecta!')
@@ -59,7 +51,6 @@ def Tseitin(A, letrasProposicionalesA):
     s = A[0]            #Simbolo para trabajar
     
     while len(A) > 0:
-        #print(f"A: {A}, pila: {pila}, s: {s}")
         if s in letrasProposicionales and len(pila) != 0 and pila[-1] == "-":
             i += 1
             atomo = letrasProposicionalesB[i]
@@ -123,6 +114,7 @@ def formaClausal(A):
    F=[]
    o=0
    while len(A)>0:
+       print(len(A))
        if o>=len(A):
            F.append(Clausula(A))
            A=[]
