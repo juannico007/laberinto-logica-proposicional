@@ -27,7 +27,7 @@ def hay_unidad(S):
 def unit_propagate(S, I):
     unidad= hay_unidad(S)
     while ([] not in S) and (unidad != None):
-        #print(len(S))
+        print(len(S))
         if len(unidad) == 1:
             I[unidad] = 1
         else:
@@ -46,7 +46,7 @@ def unit_propagate(S, I):
         
     return S, I
 
-def R_DPLL(S, I):
+def DPLL(S, I):
     S, I = unit_propagate(S, I)
     if S == 'Insatisfacible' or [] in S:
         return None
@@ -76,7 +76,7 @@ def R_DPLL(S, I):
         if comp in i:
             i.remove(comp)
             
-    ret = R_DPLL(Sp, Ip)
+    ret = DPLL(Sp, Ip)
     if ret != None:
         return ret
     
@@ -93,27 +93,9 @@ def R_DPLL(S, I):
         if unidad in i:
             i.remove(unidad)
             
-    return R_DPLL(Spp, Ipp)
+    return DPLL(Spp, Ipp)
             
 
-def DPLL(S, I):
-    for unidad in I:
-        comp = complemento(unidad)
-        if I[unidad] == 1:
-            S = [c for c in S if unidad not in c]
-            for i in S:
-                if comp in i:
-                    i.remove(comp)
-        else:
-            S = [c for c in S if comp not in c]
-            for i in S:
-                if unidad in i:
-                    i.remove(unidad)
-        if S == 'Insatisfacible' or [] in S:
-            return None
-    print("first step done")
-    return R_DPLL(S, I)
-    
 if __name__ == "__main__":
     s = [['p', 'q' , 'r'], ['-p', '-q', '-r'], ['-p', 'q', 'r'], ['-q', 'r'], ['q', '-r']]
     I = {}
