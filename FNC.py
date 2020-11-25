@@ -74,7 +74,6 @@ def Tseitin(A, letrasProposicionalesA):
             A = A[1:]
             if len(A) > 0:
                 s = A[0]
-        print(len(A))
     
     B = ""
     if i < 0:
@@ -114,7 +113,6 @@ def formaClausal(A):
    F=[]
    o=0
    while len(A)>0:
-       print(len(A))
        if o>=len(A):
            F.append(Clausula(A))
            A=[]
