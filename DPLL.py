@@ -12,7 +12,6 @@ def complemento(l):
     elif l[0] == '-':
         return l[1]
     else:
-        #print(f"error, literal invalido {l}")
         raise Exception(f"error, literal invalido {l}")
 
 def hay_unidad(S):
@@ -27,7 +26,6 @@ def hay_unidad(S):
 def unit_propagate(S, I):
     unidad= hay_unidad(S)
     while ([] not in S) and (unidad != None):
-        print(len(S))
         if len(unidad) == 1:
             I[unidad] = 1
         else:
