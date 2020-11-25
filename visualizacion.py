@@ -88,15 +88,16 @@ def dibujar_tablero(f, n, m, t, a):
             if c == cprev + 7:
                 tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2 + 0.005), 0.01, -step_y - 0.005], facecolor='red'))
                 direc = "down"
+            if c == cf:
                 vertices = []
                 if direc == "right":
                     vertices.append(((c % n) * step_x + step_x / 2, 1 - (c // n + 1) * step_y + step_y / 2 + 0.005))
                     vertices.append(((c % n) * step_x + step_x / 4, 1 - (c // n + 1) * step_y + step_y / 3 + 0.005))
                     vertices.append(((c % n) * step_x + step_x / 4, 1 - (c // n + 1) * step_y + 2 * step_y / 3 + 0.005))
                 elif direc == "up":
-                    vertices.append(((c % n) * step_x + step_x / 2 + 0.005, 1 - (c // n + 1) * step_y + step_y / 2) + 0.01)
-                    vertices.append(((c % n) * step_x + step_x / 3 + 0.005, 1 - (c // n + 1) * step_y + step_y / 4) + 0.01)
-                    vertices.append(((c % n) * step_x + 2 * step_x / 3 + 0.005, 1 - (c // n + 1) * step_y + step_y / 4) + 0.01)
+                    vertices.append(((c % n) * step_x + step_x / 2 + 0.005, 1 - (c // n + 1) * step_y + step_y / 2 + 0.01))
+                    vertices.append(((c % n) * step_x + step_x / 3 + 0.005, 1 - (c // n + 1) * step_y + step_y / 4 + 0.01))
+                    vertices.append(((c % n) * step_x + 2 * step_x / 3 + 0.005, 1 - (c // n + 1) * step_y + step_y / 4 + 0.01))
                 elif direc == "left":
                     vertices.append(((c % n) * step_x + step_x / 2, 1 - (c // n + 1) * step_y + step_y / 2+ 0.005))
                     vertices.append(((c % n) * step_x + 3 * step_x / 4, 1 - (c // n + 1) * step_y + step_y / 3 + 0.005))
