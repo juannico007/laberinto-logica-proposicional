@@ -112,7 +112,6 @@ def create_maze(start, end, c = 7, f = 7):
                     if ca[0] == y:
                         ll.append(ca[1])
             ll.sort()
-            print(ll)
             mini = ll[0]
             maxi = ll[-1]
             set_c = set()
@@ -154,6 +153,4 @@ def create_maze(start, end, c = 7, f = 7):
                     if (i,j) not in sets[0][0]:
                         walls.append((i, j))
                         
-    #print("sets: ", sets)
-    #print(board)
     return walls
