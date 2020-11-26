@@ -39,8 +39,7 @@ def enFNC(A):
 # Algoritmo de transformacion de Tseitin
 # Input: A (cadena) en notacion inorder
 # Output: B (cadena), Tseitin
-def Tseitin(A, letrasProposicionalesA):
-    letrasProposicionalesB =  [chr(x) for x in range(2706, 1000000)]
+def Tseitin(A, letrasProposicionalesA, letrasProposicionalesB):
     letrasProposicionales = letrasProposicionalesA + letrasProposicionalesB
     assert(not bool(set(letrasProposicionalesA) & set(letrasProposicionalesB))), u"¡Hay letras proposicionales en común!"
 
@@ -93,18 +92,10 @@ def Tseitin(A, letrasProposicionalesA):
 # Output: L (lista), lista de literales
 # Se asume que cada literal es un solo caracter
 def Clausula(C):
-    L=[]
-    while len(C)>0:
-        s=C[0]
-        if s =="-":
-            L.append(s+C[1])
-            C = C[3:]
-        else:
-            L.append(s)
-            C=C[2:]
-    return L  
-    
-    
+    C = C.replace(")", "")
+    C = C.replace("(", "")
+    C = C.split("O")
+    return C  
 
 # Algoritmo para obtencion de forma clausal
 # Input: A (cadena) en notacion inorder en FNC

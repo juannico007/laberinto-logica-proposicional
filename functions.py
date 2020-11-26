@@ -264,10 +264,10 @@ def regla_4(Nf, Nc, Nt):
                     else:
                         r4 += P(f, c, t + 1, Nf, Nc, Nt) + "O"
                 if inicial_2:
-                    r4 += P(i, j, t, Nf, Nc, Nt) + ">"
+                    r4 += P(i, j, t, Nf, Nc, Nt) + "-" + "O"
                     inicial_2 = False
                 else:
-                    r4 += P(i, j, t, Nf, Nc, Nt) + ">" + "Y"
+                    r4 += P(i, j, t, Nf, Nc, Nt) + "-" + "O"+ "Y"
         if inicial_3:
             inicial_3 = False
         else:
@@ -282,16 +282,16 @@ def regla_5(f, Nf, Nc, Nt):
     inicial_2 = True
     for i in range(Nt - 1):
         inicial = True
+        p = P(f[0], f[1], i, Nf, Nc, Nt)
         for t in range(i + 1, Nt):
             if inicial:
-                r5 += P(f[0], f[1], t, Nf, Nc, Nt) 
+                r5 += p + "-" + P(f[0], f[1], t, Nf, Nc, Nt) + "O"
                 inicial = False
             else:
-                r5 += P(f[0], f[1], t, Nf, Nc, Nt) + "Y"
+                r5 += p + "-" + P(f[0], f[1], t, Nf, Nc, Nt) + "O" + "Y"
         if inicial_2:
-            r5 += P(f[0], f[1], i, Nf, Nc, Nt) + ">"
             inicial_2 = False
         else:
-            r5 += P(f[0], f[1], i, Nf, Nc, Nt) + ">" + "Y"
-        
+            r5 += "Y"
+
     return r5
