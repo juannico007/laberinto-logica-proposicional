@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import functions as fn
 import maze as mz
+import FNC as F
+import json
 import guardar_reglas as gr
 
 letrasProposicionales = [chr(x) for x in range(256, 2706)]
@@ -37,30 +39,36 @@ for i in range(Nturnos):
 
 
 print("Generando reglas y formula")
-formula = ""
+#Reglas estaticas:
+#Regla 2
+#formula_2 = fn.regla_2(Nfilas, Ncolumnas, Nturnos)
+#letrasProposicionales2 = [chr(x) for x in range(3000, 125000)]
+#gr.guardar_polaca(formula_2, "formula_2", letrasProposicionales, letrasProposicionales2)
 
+#Regla 3
+#formula_3 = fn.regla_3(Nfilas, Ncolumnas, Nturnos)
+#letrasProposicionales3 = [chr(x) for x in range(125000, 130000)]
+#gr.guardar_polaca(formula_3, "formula_3", letrasProposicionales, letrasProposicionales3)
+
+#Regla 4
+#formula_4 = fn.regla_4(Nfilas, Ncolumnas, Nturnos)
+#gr.guardar_fnc(fn.String2Tree(formula_4).inorder(), "Formula_4")
+
+
+
+#Reglas que varian
+regla = []
 #Condiciones iniciales
 cond_iniciales = fn.cond_inicial(muros, Nfilas, Ncolumnas)
-formula += cond_iniciales
+regla += (F.formaClausal(fn.String2Tree(cond_iniciales).inorder()))
 
 #Regla 1
 formula_1 = fn.regla_1(inicio, final, Nfilas, Ncolumnas, Nturnos)
-formula += formula_1 + "Y"
-
-#Regla 2
-formula_2 = fn.regla_2(Nfilas, Ncolumnas, Nturnos)
-formula += formula_2 + "Y"
-
-#Regla 3
-formula_3 = fn.regla_3(Nfilas, Ncolumnas, Nturnos)
-formula += formula_3 + "Y"
-
-#Regla 4
-formula_4 = fn.regla_4(Nfilas, Ncolumnas, Nturnos)
-formula += formula_4 + "Y"
+regla += (F.formaClausal(fn.String2Tree(formula_1).inorder()))
 
 #Regla 5
 formula_5 = fn.regla_5(final, Nfilas, Ncolumnas, Nturnos)
-formula += formula_5 + "Y"
+regla += (F.formaClausal(fn.String2Tree(formula_5).inorder()))
 
-gr.guardar_polaca(formula, archivo, letrasProposicionales)
+with open(archivo + '.json', 'w') as outfile:
+        json.dump(regla, outfile)
