@@ -10,10 +10,8 @@
 # Formato de la entrada: - las letras proposionales seran: 1, ..., 2450;
 #                        - solo se aceptan literales (ej. 1, ~2, 3, ~4, etc.)
 # Require conocer el tamaño de la cuadricula
-# Requiere también un número natural, para servir de índice del tablero,
-# toda vez que pueden solicitarse varios tableros.
-
-# Salida: archivo tablero_%i.png, donde %i es un número natural
+# Requiere también un nombre de forma (casilla inicial)-(casilla final) para la imagen.
+# Salida: archivo tablero_%i.png, donde %i es el nombre
 
 #################
 # importando paquetes para dibujar
@@ -22,7 +20,6 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.offsetbox import AnnotationBbox, OffsetImage
 print("Listo!")
 
 def dibujar_tablero(f, n, m, t, a):
@@ -79,13 +76,13 @@ def dibujar_tablero(f, n, m, t, a):
             if c == cprev - 1:
                 tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2 + 0.005, 1 - (cprev // n + 1) * step_y + step_y / 2), -step_x, 0.01], facecolor='red'))
                 direc = "left"
-            if c == cprev - 7:
+            if c == cprev - n:
                 tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2), 0.01, step_y + 0.005], facecolor='red'))
                 direc = "up"
             if c == cprev + 1:
                 tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2- 0.005), step_x + 0.01, 0.01], facecolor='red'))
                 direc = "right"
-            if c == cprev + 7:
+            if c == cprev + n:
                 tangulos.append(patches.Rectangle(*[((cprev % n) * step_x + step_x / 2, 1 - (cprev // n + 1) * step_y + step_y / 2 + 0.005), 0.01, -step_y - 0.005], facecolor='red'))
                 direc = "down"
             if c == cf:
