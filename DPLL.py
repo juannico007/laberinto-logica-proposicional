@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import copy
 
 letrasProposicionales = [chr(x) for x in range(256, 1000000)]
 #letrasProposicionales = ['p', 'q', 'r', 's', 't']
@@ -26,6 +27,7 @@ def hay_unidad(S):
 def unit_propagate(S, I):
     unidad= hay_unidad(S)
     while ([] not in S) and (unidad != None):
+        print("up", len(S))
         if len(unidad) == 1:
             I[unidad] = 1
         else:
@@ -37,30 +39,22 @@ def unit_propagate(S, I):
             if comp in i:
                 i.remove(comp)
         
-        if [] in S:
-            return 'Insatisfacible', {}
-        
         unidad = hay_unidad(S)
         
     return S, I
 
 def DPLL(S, I):
+    print(len(S))
     S, I = unit_propagate(S, I)
-    if S == 'Insatisfacible' or [] in S:
-        return None
+    if [] in S:
+        print("c muere")
+        return "Insatisfacible", {}
     if S == []:
-        return I
-    count = {}
-    max = [None, 0]
-    for i in S:
-        for j in i:
-            count[j] = count.get(j, 0) + 1
-            if count[j] > max[1]:
-                max[0] = j
-                max[1] = count[j]
+        return "Satisfacible", I
+    
+    unidad = S[0][0]
                 
-    Ip = dict.copy(I)             
-    unidad = max[0]
+    Ip = copy.deepcopy(I)     
     comp = complemento(unidad)
     
     if len(unidad) == 1:
@@ -75,30 +69,31 @@ def DPLL(S, I):
             i.remove(comp)
             
     ret = DPLL(Sp, Ip)
-    if ret != None:
-        return ret
+    if ret[0] == "Satisfacible":
+        return "Satisfacible", ret[1]
     
-    Ipp = dict.copy(I)
-    if len(unidad) == 1:
-        Ipp[unidad] = 0
     else:
-        Ipp[comp] = 1
+        Ipp = copy.deepcopy(I)
+        if len(unidad) == 1:
+            Ipp[unidad] = 0
+        else:
+            Ipp[comp] = 1
         
-    comp = complemento(unidad)
-    Spp = [c[:] for c in S if comp not in c]
-    
-    for i in Spp:
-        if unidad in i:
-            i.remove(unidad)
+        comp = complemento(unidad)
+        Spp = [c[:] for c in S if comp not in c]
+        
+        for i in Spp:
+            if unidad in i:
+                i.remove(unidad)
             
-    return DPLL(Spp, Ipp)
+        return DPLL(Spp, Ipp)
             
 
 if __name__ == "__main__":
     s = [['p', 'q' , 'r'], ['-p', '-q', '-r'], ['-p', 'q', 'r'], ['-q', 'r'], ['q', '-r']]
     I = {}
 
-    I = DPLL (s, I)
+    I = DPLL(s, I)[1]
     if I != None:
         print(I)
     else:
