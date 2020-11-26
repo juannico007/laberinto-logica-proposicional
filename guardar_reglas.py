@@ -4,13 +4,13 @@ import functions as fn
 import json
 print("Listo!")
 
-def guardar_polaca(regla_polaca, archivo, letrasProposicionalesA):
+def guardar_polaca(regla_polaca, archivo, letrasProposicionalesA, letrasProposicionalesB):
     print("Creando arbol...")
     regla_arbol = fn.String2Tree(regla_polaca)
     print("Creando cadena inorder...")
     regla_inorder = regla_arbol.inorder()
     print("Transformacion de Tseitin...")
-    regla_fnc = F.Tseitin(regla_inorder, letrasProposicionalesA)
+    regla_fnc = F.Tseitin(regla_inorder, letrasProposicionalesA, letrasProposicionalesB)
     print("Forma clausal...")
     regla_clausal = F.formaClausal(regla_fnc)
     print(f"Guardando a archivo {archivo}...")
@@ -28,9 +28,10 @@ def guardar_inorder(regla_inorder, archivo, letrasProposicionalesA, letrasPropos
         json.dump(regla_clausal, outfile)
     print("Terminado!")
 
-def guardar_fnc(regla_fnc, archivo, letrasProposicionalesA, letrasProposicionalesB):
+def guardar_fnc(regla_fnc, archivo):
     print("Forma clausal...")
     regla_clausal = F.formaClausal(regla_fnc)
+    print(regla_clausal)
     print(f"Guardando a archivo {archivo}...")
     with open(archivo + '.json', 'w') as outfile:
         json.dump(regla_clausal, outfile)
