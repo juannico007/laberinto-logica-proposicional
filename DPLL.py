@@ -3,6 +3,7 @@
 import copy
 
 letrasProposicionales = [chr(x) for x in range(256, 1000000)]
+c = 0
 #letrasProposicionales = ['p', 'q', 'r', 's', 't']
 
 #Encuentra el complemento de un literal
@@ -27,7 +28,6 @@ def hay_unidad(S):
 def unit_propagate(S, I):
     unidad= hay_unidad(S)
     while ([] not in S) and (unidad != None):
-        print("up", len(S))
         if len(unidad) == 1:
             I[unidad] = 1
         else:
@@ -47,14 +47,23 @@ def DPLL(S, I):
     print(len(S))
     S, I = unit_propagate(S, I)
     if [] in S:
-        print("c muere")
+        c+=1
+        print("c muere", c)
         return "Insatisfacible", {}
     if S == []:
         return "Satisfacible", I
     
-    unidad = S[0][0]
+    count = {}
+    max = [None, 0]
+    for i in S:
+        for j in i:
+            count[j] = count.get(j, 0) + 1
+            if count[j] > max[1]:
+                max[0] = j
+                max[1] = count[j]
                 
-    Ip = copy.deepcopy(I)     
+    Ip = copy.deepcopy(I)                
+    unidad = max[0]
     comp = complemento(unidad)
     
     if len(unidad) == 1:
