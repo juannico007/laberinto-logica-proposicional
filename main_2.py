@@ -10,11 +10,11 @@ Ncolumnas = 7
 Nturnos = 49
 
 #Archivos creados para distintas pruebas
-archivo = "(0, 0)-(0, 6)"                  #prueba correcta
-#archivo = "(2, 4)-(1, 6)"                  
-#archivo = "(3, 3)-(0, 0)"                  #crasheo, no asigno valores de verdad a todas las letras ._.
-#archivo = "(3, 5)-(0, 4)"
-#archivo = "(6, 6)-(4, 5)"
+#archivo = "(0, 0)-(0, 6)"                  #prueba correcta
+#archivo = "(6, 6)-(0, 2)"                  #prueba correcta           
+#archivo = "(3, 3)-(0, 0)"                  #prueba correcta
+#archivo = "(3, 5)-(0, 4)"                  #prueba correcta
+archivo = "(3, 2)-(5, 4)"
 
 interp_verdaderas = {}
 
