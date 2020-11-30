@@ -44,11 +44,9 @@ def unit_propagate(S, I):
     return S, I
 
 def DPLL(S, I):
-    print(len(S))
+    #print(len(S))
     S, I = unit_propagate(S, I)
     if [] in S:
-        c+=1
-        print("c muere", c)
         return "Insatisfacible", {}
     if S == []:
         return "Satisfacible", I
@@ -62,7 +60,7 @@ def DPLL(S, I):
                 max[0] = j
                 max[1] = count[j]
                 
-    Ip = copy.deepcopy(I)                
+    Ip = copy.deepcopy(I)
     unidad = max[0]
     comp = complemento(unidad)
     
